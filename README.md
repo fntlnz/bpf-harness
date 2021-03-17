@@ -89,29 +89,32 @@ TEST(test_renameat2, basic)
 
 The tests here are integrated in our CMake build.
 
-You can build them as follows:
+Before building the tests in this project, you need
+to get a copy of the `falcosecurity/libs` repository and
+build a copy of the BPF probe to test against.
 
 ```bash
+$ git clone https://github.com/falcosecurity/libs.git libs
+$ cd /tmp/libs
+$ mkdir build
+$ cmake -DBUILD_BPF=True ..
+$ make bpf
+```
+
+Now you can build the suite.
+Remember to replace `<path-to-libs>` with the actual path where you cloned
+libs.
+
+```
+$ git clone https://github.com/fntlnz/bpf-harness.git bpf-harness
 $ mkdir build
 $ cd build
-$ cmake ..
+$ cmake -DFALCOSECURITY_LIBS_SOURCE_DIR=<path-to-libs> ..
 $ make runner
 ```
 
 If you want to see debug information both from the loader and from the probe (bpf_printk) you can do so by
 enabling the debug build with the CMake option `-DBPF_TEST_DEBUG=True`.
-
-Now, before executing the test, you will need an actual bpf probe object `probe.o` to test against.
-
-You can compile the probe with:
-
-```bash
-$ git clone https://github.com/falcosecurity/libs.git ~/libs
-$ cd libs
-$ mkdir build
-$ cmake -DBUILD_BPF=True ..
-$ make bpf
-```
 
 Now you can execute the tests with (requires root privileges):
 

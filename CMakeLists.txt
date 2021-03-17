@@ -21,17 +21,20 @@ project(
 
 option(BPF_TEST_DEBUG "Enable debug mode for the BPF driver tests (prints debug logs and the bpf_printk buffer, you will need a probe compiled with -DDEBUG)" OFF)
 
-#todo(fntlnz): changeme
-set(LIBS_SOURCE_DIR /home/fntlnz/Projects/falcosecurity/libs)
+set(LIBS_SOURCE_DIR ../libs)
+if (FALCOSECURITY_LIBS_SOURCE_DIR)
+  set(LIBS_SOURCE_DIR ${FALCOSECURITY_LIBS_SOURCE_DIR})
+endif ()
+
 
 # Custom CMake modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 # Out of source builds
 file(TO_CMAKE_PATH "${PROJECT_BINARY_DIR}/CMakeLists.txt" LOC_PATH)
-if(EXISTS "${LOC_PATH}")
+if (EXISTS "${LOC_PATH}")
   message(FATAL_ERROR "You cannot build in a source directory (or any directory with a CMakeLists.txt file). Please make a build subdirectory. Feel free to remove CMakeCache.txt and CMakeFiles.")
-endif()
+endif ()
 
 include(ExternalProject)
 include(zlib)
