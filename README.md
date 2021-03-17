@@ -93,23 +93,27 @@ Before building the tests in this project, you need
 to get a copy of the `falcosecurity/libs` repository and
 build a copy of the BPF probe to test against.
 
+Remember to replace `/tmp` with the actual path where you want to clone the stuff.
+
 ```bash
+$ cd /tmp
 $ git clone https://github.com/falcosecurity/libs.git libs
-$ cd /tmp/libs
+$ cd libs
 $ mkdir build
+$ cd build
 $ cmake -DBUILD_BPF=True ..
 $ make bpf
 ```
 
 Now you can build the suite.
-Remember to replace `<path-to-libs>` with the actual path where you cloned
-libs.
+
 
 ```
+$ cd /tmp
 $ git clone https://github.com/fntlnz/bpf-harness.git bpf-harness
 $ mkdir build
 $ cd build
-$ cmake -DFALCOSECURITY_LIBS_SOURCE_DIR=<path-to-libs> ..
+$ cmake -DFALCOSECURITY_LIBS_SOURCE_DIR=/tmp/libs ..
 $ make runner
 ```
 
@@ -119,5 +123,5 @@ enabling the debug build with the CMake option `-DBPF_TEST_DEBUG=True`.
 Now you can execute the tests with (requires root privileges):
 
 ```bash
-# ./build/tests/runner -p ~/libs/driver/bpf/probe.o
+# ./build/tests/runner -p /tmp/libs/driver/bpf/probe.o
 ```
