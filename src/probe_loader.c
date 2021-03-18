@@ -41,7 +41,14 @@ int get_scratch(struct bpf_object *obj, unsigned int cpu, char *scratch)
 	return bpf_map_lookup_elem(frame_scratch_map, &cpu, scratch);
 }
 
-int do_test_single_filler(const char *filler_name, struct sys_exit_args ctx, enum ppm_event_type event_type, char *scratch)
+int get_tmp_scratch(struct bpf_object *obj, unsigned int cpu, char *scratch)
+{
+	int tmp_scratch_map;
+	tmp_scratch_map = bpf_object__find_map_fd_by_name(obj, "tmp_scratch_map");
+	return bpf_map_lookup_elem(tmp_scratch_map, &cpu, scratch);
+}
+
+int do_test_single_filler(const char *filler_name, struct sys_exit_args ctx, enum ppm_event_type event_type, char *scratch, char *tmp_scratch)
 {
 	unsigned int cpu;
 	struct bpf_program *prog;
@@ -127,6 +134,7 @@ int do_test_single_filler(const char *filler_name, struct sys_exit_args ctx, enu
 	err = bpf_prog_test_run_xattr(&tattr);
 
 	get_scratch(obj, cpu, scratch);
+	get_tmp_scratch(obj, cpu, tmp_scratch);
 
 	return err;
 }

@@ -67,7 +67,7 @@ extern const enum ppm_syscall_code g_syscall_code_routing_table[];
 
 extern char *g_probe_path;
 
-int do_test_single_filler(const char *filler_name, struct sys_exit_args ctx, enum ppm_event_type event_type, char *scratch);
+int do_test_single_filler(const char *filler_name, struct sys_exit_args ctx, enum ppm_event_type event_type, char *scratch, char *tmp_scratch);
 
 #ifdef BPF_TEST_DEBUG
 #define debug_fprintf fprintf

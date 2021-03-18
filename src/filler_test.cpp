@@ -18,71 +18,76 @@ limitations under the License.
 #include <cstring>
 
 filler_test::filler_test(ppm_event_type event_type):
-    m_event_type(event_type)
+	m_event_type(event_type)
 {
-  m_scratch = (char*)malloc(sizeof(char) * SCRATCH_SIZE_HALF);
-  m_filler_nparams = g_event_info[m_event_type].nparams;
-  m_scratch_header_offset = sizeof(struct ppm_evt_hdr) + sizeof(__u16) * m_filler_nparams;
+	m_scratch = (char*)malloc(sizeof(char) * SCRATCH_SIZE_HALF);
+	m_filler_nparams = g_event_info[m_event_type].nparams;
+	m_scratch_header_offset = sizeof(struct ppm_evt_hdr) + sizeof(__u16) * m_filler_nparams;
+	m_tmp_scratch = (char*)malloc(sizeof(char) * SCRATCH_SIZE_HALF);
+	std::string filler_name = "bpf_sys_";
+	filler_name.append(g_event_info[m_event_type].name);
 
-  std::string filler_name = "bpf_sys_";
-  filler_name.append(g_event_info[m_event_type].name);
-
-  if(PPME_IS_ENTER(m_event_type))
-  {
-    filler_name.append("_e");
-  }
-  else
-  {
-    filler_name.append("_x");
-  }
-  m_filler_name = filler_name;
+	if(PPME_IS_ENTER(m_event_type))
+	{
+		filler_name.append("_e");
+	}
+	else
+	{
+		filler_name.append("_x");
+	}
+	m_filler_name = filler_name;
 }
 
 int filler_test::do_test(
-    unsigned long retval,
-    unsigned long arg0,
-    unsigned long arg1,
-    unsigned long arg2,
-    unsigned long arg3,
-    unsigned long arg4,
-    unsigned long arg5)
+	unsigned long retval,
+	unsigned long arg0,
+	unsigned long arg1,
+	unsigned long arg2,
+	unsigned long arg3,
+	unsigned long arg4,
+	unsigned long arg5)
 {
-  // This is the set of registers
-  // for x86_64, see (man 2 syscall)
-  // to support other architectures
-  struct pt_regs regs;
-  regs.di = arg0;
-  regs.si = arg1;
-  regs.dx = arg2;
-  regs.r10 = arg3;
-  regs.r8 = arg4;
-  regs.r9 = arg5;
+	// This is the set of registers
+	// for x86_64, see (man 2 syscall)
+	// to support other architectures
+	struct pt_regs regs;
+	regs.di = arg0;
+	regs.si = arg1;
+	regs.dx = arg2;
+	regs.r10 = arg3;
+	regs.r8 = arg4;
+	regs.r9 = arg5;
 
-  struct sys_exit_args ctx
-      {
-          .regs = reinterpret_cast<unsigned long>(&regs),
-          .ret = retval,
-      };
-  return do_test_single_filler(m_filler_name.c_str(), ctx, m_event_type, m_scratch);
+	struct sys_exit_args ctx
+	{
+		.regs = reinterpret_cast<unsigned long>(&regs),
+		.ret = retval,
+	};
+	return do_test_single_filler(m_filler_name.c_str(), ctx, m_event_type, m_scratch, m_tmp_scratch);
 }
 
 filler_test::~filler_test()
 {
-  free(m_scratch);
+	free(m_scratch);
 }
 
 unsigned long filler_test::get_retval()
 {
-  return m_scratch[m_scratch_header_offset];
+	return m_scratch[m_scratch_header_offset];
 }
 
 unsigned long filler_test::get_argument(uint32_t off)
 {
-  return m_scratch[m_scratch_header_offset + off];
+	return m_scratch[m_scratch_header_offset + off];
 }
 
 unsigned long filler_test::get_argument(void* to, uint32_t off, unsigned long n)
 {
-  memcpy(to, m_scratch + m_scratch_header_offset + off, n);
-  return n;
+	memcpy(to, m_scratch + m_scratch_header_offset + off, n);
+	return n;
+}
+
+char* filler_test::get_tmp_scratch()
+{
+	return m_tmp_scratch;
 }

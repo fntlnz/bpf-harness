@@ -27,27 +27,29 @@ extern "C"
 class filler_test
 {
 public:
-  explicit filler_test(ppm_event_type event_type);
-  virtual ~filler_test();
+	explicit filler_test(ppm_event_type event_type);
+	virtual ~filler_test();
 
 public:
-  int do_test(unsigned long retval,
-              unsigned long arg0 = 0,
-              unsigned long arg1 = 0,
-              unsigned long arg2 = 0,
-              unsigned long arg3 = 0,
-              unsigned long arg4 = 0,
-              unsigned long arg5 = 0);
-  unsigned long get_argument(void* to, uint32_t off, unsigned long n);
-  unsigned long get_argument(uint32_t off);
-  unsigned long get_retval();
+	int do_test(unsigned long retval,
+		    unsigned long arg0 = 0,
+		    unsigned long arg1 = 0,
+		    unsigned long arg2 = 0,
+		    unsigned long arg3 = 0,
+		    unsigned long arg4 = 0,
+		    unsigned long arg5 = 0);
+	unsigned long get_argument(void* to, uint32_t off, unsigned long n);
+	unsigned long get_argument(uint32_t off);
+	unsigned long get_retval();
+	char* get_tmp_scratch();
 
 private:
-  std::string m_filler_name{};
-  enum ppm_event_type m_event_type;
-  char* m_scratch{};
-  int m_filler_nparams;
-  int m_scratch_header_offset;
+	std::string m_filler_name{};
+	enum ppm_event_type m_event_type;
+	char* m_scratch{};
+	char* m_tmp_scratch{};
+	int m_filler_nparams;
+	int m_scratch_header_offset;
 };
 
 #endif // _TEST_FILLER_TEST_H
