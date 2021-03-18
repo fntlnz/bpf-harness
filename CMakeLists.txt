@@ -21,7 +21,7 @@ project(
 
 option(BPF_TEST_DEBUG "Enable debug mode for the BPF driver tests (prints debug logs and the bpf_printk buffer, you will need a probe compiled with -DDEBUG)" OFF)
 
-set(LIBS_SOURCE_DIR ../libs)
+set(LIBS_SOURCE_DIR ../../libs)
 if (FALCOSECURITY_LIBS_SOURCE_DIR)
   set(LIBS_SOURCE_DIR ${FALCOSECURITY_LIBS_SOURCE_DIR})
 endif ()
