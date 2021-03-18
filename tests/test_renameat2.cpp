@@ -18,7 +18,7 @@ limitations under the License.
 
 #include <bpf_harness/filler_test.h>
 
-TEST(test_renameat2, basic)
+TEST(test_renameat2_x, basic)
 {
 	int err;
 	uint32_t off;
