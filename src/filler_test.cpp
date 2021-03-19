@@ -24,17 +24,15 @@ filler_test::filler_test(ppm_event_type event_type):
 	m_filler_nparams = g_event_info[m_event_type].nparams;
 	m_scratch_header_offset = sizeof(struct ppm_evt_hdr) + sizeof(__u16) * m_filler_nparams;
 	m_tmp_scratch = (char*)malloc(sizeof(char) * SCRATCH_SIZE_HALF);
-	std::string filler_name = "bpf_sys_";
-	filler_name.append(g_event_info[m_event_type].name);
 
-	if(PPME_IS_ENTER(m_event_type))
-	{
-		filler_name.append("_e");
-	}
-	else
-	{
-		filler_name.append("_x");
-	}
+#define FILLER_NAME_FN(x) #x,
+	static const char* filler_names[PPM_FILLER_MAX] = {
+		FILLER_LIST_MAPPER(FILLER_NAME_FN)};
+#undef FILLER_NAME_FN
+
+	std::string prog_name = std::string(filler_names[g_ppm_events[m_event_type].filler_id]);
+	std::string filler_name = std::string("bpf_");
+	filler_name.append(prog_name);
 	m_filler_name = filler_name;
 }
 
