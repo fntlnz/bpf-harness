@@ -125,6 +125,13 @@ int do_test_single_filler(const char *filler_name, struct sys_exit_args ctx, enu
 
 	prog = bpf_object__find_program_by_name(obj, filler_name);
 
+	if(prog == NULL)
+	{
+		fprintf(stderr, "ERROR: could not find specified program: %s\n", filler_name);
+		bpf_object__close(obj);
+		return -1;
+	}
+
 	prog_fd = bpf_program__fd(prog);
 
 	tattr.prog_fd = prog_fd;
@@ -133,8 +140,15 @@ int do_test_single_filler(const char *filler_name, struct sys_exit_args ctx, enu
 
 	err = bpf_prog_test_run_xattr(&tattr);
 
+	if(err != 0)
+	{
+		fprintf(stderr, "ERROR: could not run the program: %s", filler_name);
+		bpf_object__close(obj);
+		return err;
+	}
+
 	get_scratch(obj, cpu, scratch);
 	get_tmp_scratch(obj, cpu, tmp_scratch);
 
-	return err;
+	return 0;
 }
