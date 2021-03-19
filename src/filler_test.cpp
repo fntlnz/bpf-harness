@@ -61,6 +61,34 @@ int filler_test::do_test(
 		.regs = reinterpret_cast<unsigned long>(&regs),
 		.ret = retval,
 	};
+	return do_test_single_filler(m_filler_name.c_str(), ctx, m_event_type, m_scratch, nullptr);
+}
+
+int filler_test::do_test_with_tmp_scratch(
+	unsigned long retval,
+	unsigned long arg0,
+	unsigned long arg1,
+	unsigned long arg2,
+	unsigned long arg3,
+	unsigned long arg4,
+	unsigned long arg5)
+{
+	// This is the set of registers
+	// for x86_64, see (man 2 syscall)
+	// to support other architectures
+	struct pt_regs regs;
+	regs.di = arg0;
+	regs.si = arg1;
+	regs.dx = arg2;
+	regs.r10 = arg3;
+	regs.r8 = arg4;
+	regs.r9 = arg5;
+
+	struct sys_exit_args ctx
+		{
+			.regs = reinterpret_cast<unsigned long>(&regs),
+			.ret = retval,
+		};
 	return do_test_single_filler(m_filler_name.c_str(), ctx, m_event_type, m_scratch, m_tmp_scratch);
 }
 

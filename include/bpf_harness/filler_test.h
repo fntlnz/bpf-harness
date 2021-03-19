@@ -38,6 +38,14 @@ public:
 		    unsigned long arg3 = 0,
 		    unsigned long arg4 = 0,
 		    unsigned long arg5 = 0);
+	int do_test_with_tmp_scratch(
+		unsigned long retval,
+		unsigned long arg0 = 0,
+		unsigned long arg1 = 0,
+		unsigned long arg2 = 0,
+		unsigned long arg3 = 0,
+		unsigned long arg4 = 0,
+		unsigned long arg5 = 0);
 	unsigned long get_argument(void* to, uint32_t off, unsigned long n);
 	unsigned long get_argument(uint32_t off);
 	unsigned long get_retval();
@@ -46,8 +54,8 @@ public:
 private:
 	std::string m_filler_name{};
 	enum ppm_event_type m_event_type;
-	char* m_scratch{};
-	char* m_tmp_scratch{};
+	char* m_scratch;
+	char* m_tmp_scratch;
 	int m_filler_nparams;
 	int m_scratch_header_offset;
 };

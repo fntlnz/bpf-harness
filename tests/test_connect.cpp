@@ -36,7 +36,7 @@ TEST(test_connect_x, af_inet_connect)
 
 	socklen_t slen = sizeof(saddr);
 
-	err = fe->do_test(0, 5, (unsigned long)&saddr, slen);
+	err = fe->do_test_with_tmp_scratch(0, 5, (unsigned long)&saddr, slen);
 	ASSERT_EQ(err, 0);
 
 	auto ret = (unsigned long)fe->get_retval();
