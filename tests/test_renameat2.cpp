@@ -18,7 +18,7 @@ limitations under the License.
 
 #include <bpf_harness/filler_test.h>
 
-TEST(test_renameat2_x, basic)
+TEST(test_renameat2_x, rename_file)
 {
 	int err;
 	uint32_t off;

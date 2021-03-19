@@ -19,7 +19,7 @@ limitations under the License.
 #include <bpf_harness/filler_test.h>
 #include <arpa/inet.h>
 
-TEST(test_connect_x, basic)
+TEST(test_connect_x, af_inet_connect)
 {
 	int err;
 	uint32_t off;

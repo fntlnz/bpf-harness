@@ -38,7 +38,8 @@ The code here is annotated with comments that helps in understanding what is goi
 #include <bpf_harness/filler_test.h>
 
 // The TEST macro here comes from the Google Test framework.
-// This is how you declare that this is a test, its name and 'basic' is the type of test you are writing
+// This is how you declare that this is a test. Its name is 'rename_file' and `test_renameat2` is
+// is the name of the test suite
 TEST(test_renameat2, basic)
 {
 	int err;
