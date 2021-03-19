@@ -69,6 +69,7 @@ int filler_test::do_test(
 filler_test::~filler_test()
 {
 	free(m_scratch);
+	free(m_tmp_scratch);
 }
 
 unsigned long filler_test::get_retval()
