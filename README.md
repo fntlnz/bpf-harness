@@ -118,11 +118,12 @@ $ cmake -DFALCOSECURITY_LIBS_SOURCE_DIR=/tmp/libs ..
 $ make runner
 ```
 
-If you want to see debug information both from the loader and from the probe (bpf_printk) you can do so by
-enabling the debug build with the CMake option `-DBPF_TEST_DEBUG=True`.
-
 Now you can execute the tests with (requires root privileges):
 
 ```bash
 # ./build/tests/runner -p /tmp/libs/driver/bpf/probe.o
 ```
+
+### Troubleshooting
+If you want to see debug information both from the loader and from the probe (bpf_printk) you can do so by
+enabling the debug build with the CMake option `-DBPF_TEST_DEBUG=True`.
