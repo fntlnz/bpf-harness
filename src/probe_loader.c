@@ -37,12 +37,25 @@ void set_rlimit_infinity(void)
 static inline int get_scratch(struct bpf_object *obj, char *map_name, unsigned int cpu, char *scratch)
 {
 	int frame_scratch_map;
-	int err;
 	frame_scratch_map = bpf_object__find_map_fd_by_name(obj, map_name);
 	return bpf_map_lookup_elem(frame_scratch_map, &cpu, scratch);
 }
 
-int do_test_single_filler(const char *filler_name, struct sys_exit_args ctx, enum ppm_event_type event_type, char *scratch, char *tmp_scratch)
+int set_settings(struct bpf_object *obj, struct sysdig_bpf_settings *settings)
+{
+	int key = 0;
+	int settings_map;
+	settings_map = bpf_object__find_map_fd_by_name(obj, "settings_map");
+	return bpf_map_update_elem(settings_map, &key, settings, BPF_ANY);
+}
+
+int do_test_single_filler(
+	const char *filler_name,
+	struct sys_exit_args ctx,
+	enum ppm_event_type event_type,
+	struct sysdig_bpf_settings *settings,
+	char *scratch,
+	char *tmp_scratch)
 {
 	unsigned int cpu;
 	struct bpf_program *prog;
@@ -60,7 +73,7 @@ int do_test_single_filler(const char *filler_name, struct sys_exit_args ctx, enu
 
 	if(libbpf_get_error(obj))
 	{
-		debug_fprintf(stderr, "error opening the bpf object\n");
+		fprintf(stderr, "error opening the bpf object\n");
 		return EXIT_FAILURE;
 	}
 	uint32_t n_cpu = sysconf(_SC_NPROCESSORS_CONF);
@@ -132,6 +145,11 @@ int do_test_single_filler(const char *filler_name, struct sys_exit_args ctx, enu
 	tattr.ctx_in = &ctx;
 	tattr.ctx_size_in = sizeof(struct sys_exit_args);
 
+	if(settings != NULL)
+	{
+		set_settings(obj, settings);
+	}
+
 	err = bpf_prog_test_run_xattr(&tattr);
 
 	if(err != 0)
@@ -143,7 +161,6 @@ int do_test_single_filler(const char *filler_name, struct sys_exit_args ctx, enu
 
 	if(scratch != NULL)
 	{
-
 		get_scratch(obj, "frame_scratch_map", cpu, scratch);
 	}
 
@@ -151,5 +168,6 @@ int do_test_single_filler(const char *filler_name, struct sys_exit_args ctx, enu
 	{
 		get_scratch(obj, "tmp_scratch_map", cpu, tmp_scratch);
 	}
+
 	return 0;
 }

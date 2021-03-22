@@ -24,6 +24,7 @@ filler_test::filler_test(ppm_event_type event_type):
 	m_filler_nparams = g_event_info[m_event_type].nparams;
 	m_scratch_header_offset = sizeof(struct ppm_evt_hdr) + sizeof(__u16) * m_filler_nparams;
 	m_tmp_scratch = (char*)malloc(sizeof(char) * SCRATCH_SIZE_HALF);
+	m_settings = nullptr;
 
 #define FILLER_NAME_FN(x) #x,
 	static const char* filler_names[PPM_FILLER_MAX] = {
@@ -61,7 +62,7 @@ int filler_test::do_test(
 		.regs = reinterpret_cast<unsigned long>(&regs),
 		.ret = retval,
 	};
-	return do_test_single_filler(m_filler_name.c_str(), ctx, m_event_type, m_scratch, nullptr);
+	return do_test_single_filler(m_filler_name.c_str(), ctx, m_event_type, m_settings, m_scratch, nullptr);
 }
 
 int filler_test::do_test_with_tmp_scratch(
@@ -89,7 +90,7 @@ int filler_test::do_test_with_tmp_scratch(
 			.regs = reinterpret_cast<unsigned long>(&regs),
 			.ret = retval,
 		};
-	return do_test_single_filler(m_filler_name.c_str(), ctx, m_event_type, m_scratch, m_tmp_scratch);
+	return do_test_single_filler(m_filler_name.c_str(), ctx, m_event_type, m_settings, m_scratch, m_tmp_scratch);
 }
 
 filler_test::~filler_test()
@@ -117,4 +118,9 @@ unsigned long filler_test::get_argument(void* to, uint32_t off, unsigned long n)
 char* filler_test::get_tmp_scratch()
 {
 	return m_tmp_scratch;
+}
+
+int filler_test::set_settings(sysdig_bpf_settings *settings)
+{
+	m_settings = settings;
 }

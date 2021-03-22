@@ -15,15 +15,12 @@ limitations under the License.
 */
 
 #include <gtest.h>
-#include <fstream>
 #include <iostream>
 #include <string>
 #include <thread>
 #include <future>
-#include <chrono>
 #include <getopt.h>
-
-#include <bpf_harness/filler_test.h>
+#include <bpf/libbpf.h>
 
 char *g_probe_path;
 

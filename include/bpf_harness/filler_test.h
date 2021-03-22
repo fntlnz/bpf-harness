@@ -50,6 +50,7 @@ public:
 	unsigned long get_argument(uint32_t off);
 	unsigned long get_retval();
 	char* get_tmp_scratch();
+	int set_settings(sysdig_bpf_settings *settings);
 
 private:
 	std::string m_filler_name{};
@@ -58,6 +59,7 @@ private:
 	char* m_tmp_scratch;
 	int m_filler_nparams;
 	int m_scratch_header_offset;
+	struct sysdig_bpf_settings *m_settings;
 };
 
 #endif // _TEST_FILLER_TEST_H
