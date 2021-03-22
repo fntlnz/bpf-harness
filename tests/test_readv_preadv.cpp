@@ -50,16 +50,16 @@ TEST(test_readv_preadv_x, readv_double_iovec)
 
 	// this filler handles ring buffer writing via
 	// bpf_parse_readv_writev_bufs
-	auto size = (int)fe->get_argument(off);
+	auto size = (int)fe->get_scratch_at(off);
 	ASSERT_EQ(size, 10);
 	off += sizeof(size);
 
 	char resbuf1[5];
-	fe->get_argument(&resbuf1, off, 5);
+	fe->get_scratch_at(&resbuf1, off, 5);
 	ASSERT_STREQ(resbuf1, "AAAA");
 	off += sizeof(resbuf1);
 
 	char resbuf2[5];
-	fe->get_argument(&resbuf2, off, 5);
+	fe->get_scratch_at(&resbuf2, off, 5);
 	ASSERT_STREQ(resbuf2, "BBBB");
 }

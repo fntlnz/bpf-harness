@@ -62,26 +62,26 @@ TEST(test_renameat2, basic)
 	off = sizeof(ret); 
 
 	// get the value of the first argument and do assertions on it
-	auto olddirfd = (long)fe->get_argument(off);
+	auto olddirfd = (long)fe->get_scratch_at(off);
 	ASSERT_EQ(olddirfd, -100);
 	// increment the offset again, this was a long so a sizeof will do again
 	off += sizeof(olddirfd);
 
 	// get the value of the second argument and do assertions on its value
 	char oldpath[PPM_MAX_PATH_SIZE];
-	fe->get_argument(&oldpath, off, PPM_MAX_PATH_SIZE);
+	fe->get_scratch_at(&oldpath, off, PPM_MAX_PATH_SIZE);
 	ASSERT_STREQ(oldpath, "oldpath");
 	// this time we can't increment the offset using sizeof because this was
 	// a null terminated string, get the lenght and add 1 for the \0
 	off += strlen(oldpath) + 1;
 
 	// and so on
-	auto newdirfd = (long)fe->get_argument(off);
+	auto newdirfd = (long)fe->get_scratch_at(off);
 	ASSERT_EQ(newdirfd, -100);
 	off += sizeof(newdirfd);
 
 	char newpath[PPM_MAX_PATH_SIZE];
-	fe->get_argument(&newpath, off, PPM_MAX_PATH_SIZE);
+	fe->get_scratch_at(&newpath, off, PPM_MAX_PATH_SIZE);
 	ASSERT_STREQ(newpath, "newpath");
 }
 ```

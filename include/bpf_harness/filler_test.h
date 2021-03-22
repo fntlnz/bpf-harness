@@ -46,8 +46,8 @@ public:
 		unsigned long arg3 = 0,
 		unsigned long arg4 = 0,
 		unsigned long arg5 = 0);
-	unsigned long get_argument(void* to, uint32_t off, unsigned long n);
-	unsigned long get_argument(uint32_t off);
+	unsigned long get_scratch_at(void* to, uint32_t off, unsigned long n);
+	unsigned long get_scratch_at(uint32_t off);
 	unsigned long get_retval();
 	char* get_tmp_scratch();
 	int set_settings(sysdig_bpf_settings *settings);

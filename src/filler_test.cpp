@@ -104,12 +104,12 @@ unsigned long filler_test::get_retval()
 	return m_scratch[m_scratch_header_offset];
 }
 
-unsigned long filler_test::get_argument(uint32_t off)
+unsigned long filler_test::get_scratch_at(uint32_t off)
 {
 	return m_scratch[m_scratch_header_offset + off];
 }
 
-unsigned long filler_test::get_argument(void* to, uint32_t off, unsigned long n)
+unsigned long filler_test::get_scratch_at(void* to, uint32_t off, unsigned long n)
 {
 	memcpy(to, m_scratch + m_scratch_header_offset + off, n);
 	return n;

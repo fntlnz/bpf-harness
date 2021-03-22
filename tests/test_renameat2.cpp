@@ -31,20 +31,20 @@ TEST(test_renameat2_x, rename_file)
 	ASSERT_EQ(ret, 110);
 	off = sizeof(ret);
 
-	auto olddirfd = (long)fe->get_argument(off);
+	auto olddirfd = (long)fe->get_scratch_at(off);
 	ASSERT_EQ(olddirfd, -100);
 	off += sizeof(olddirfd);
 
 	char oldpath[PPM_MAX_PATH_SIZE];
-	fe->get_argument(&oldpath, off, PPM_MAX_PATH_SIZE);
+	fe->get_scratch_at(&oldpath, off, PPM_MAX_PATH_SIZE);
 	ASSERT_STREQ(oldpath, "oldpath");
 	off += strlen(oldpath) + 1;
 
-	auto newdirfd = (long)fe->get_argument(off);
+	auto newdirfd = (long)fe->get_scratch_at(off);
 	ASSERT_EQ(newdirfd, -100);
 	off += sizeof(newdirfd);
 
 	char newpath[PPM_MAX_PATH_SIZE];
-	fe->get_argument(&newpath, off, PPM_MAX_PATH_SIZE);
+	fe->get_scratch_at(&newpath, off, PPM_MAX_PATH_SIZE);
 	ASSERT_STREQ(newpath, "newpath");
 }
