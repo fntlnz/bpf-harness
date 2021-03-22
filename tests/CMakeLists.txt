@@ -2,8 +2,9 @@ file(GLOB TEST_SOURCE_LIST CONFIGURE_DEPENDS "${bpf_harness_SOURCE_DIR}/tests/te
 add_executable(runner runner.cpp ${TEST_SOURCE_LIST})
 target_compile_features(runner PRIVATE cxx_std_17)
 
-target_link_libraries(runner PRIVATE bpf_harness ${LIBBPF_LIB} ${GTEST_LIB} ${GTEST_MAIN_LIB})
+target_link_libraries(runner PRIVATE bpf_harness ${LIBBPF_LIB} ${GTEST_LIB} ${GTEST_MAIN_LIB} ${STATIC_FLAGS})
 target_include_directories(runner PRIVATE ${LIBBPF_INCLUDE} ${GTEST_INCLUDE_DIR})
+add_dependencies(runner libbpf)
 
 if (BPF_TEST_DEBUG)
   message(STATUS "BPF test debug mode enabled")

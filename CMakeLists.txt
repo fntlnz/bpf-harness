@@ -20,12 +20,18 @@ project(
   LANGUAGES CXX C)
 
 option(BPF_TEST_DEBUG "Enable debug mode for the BPF driver tests (prints debug logs and the bpf_printk buffer, you will need a probe compiled with -DDEBUG)" OFF)
+option(USE_BUNDLED_DEPS "Enable bundled dependencies instead of using the system ones" ON)
+option(BUILD_STATIC "Static build (better suited to be executed with musl-libc)" OFF)
 
 set(LIBS_SOURCE_DIR ../../libs)
 if (FALCOSECURITY_LIBS_SOURCE_DIR)
   set(LIBS_SOURCE_DIR ${FALCOSECURITY_LIBS_SOURCE_DIR})
 endif ()
 
+set(STATIC_FLAGS "")
+if(BUILD_STATIC)
+  set(STATIC_FLAGS "-static")
+endif()
 
 # Custom CMake modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")

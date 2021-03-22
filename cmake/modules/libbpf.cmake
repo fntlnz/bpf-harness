@@ -18,6 +18,7 @@ set(LIBBPF_SRC "${CMAKE_CURRENT_BINARY_DIR}/libbpf-prefix/src")
 set(LIBBPF_BUILD_DIR "${LIBBPF_SRC}/libbpf-build")
 set(LIBBPF_INCLUDE "${LIBBPF_BUILD_DIR}/root/usr/include")
 set(LIBBPF_LIB "${LIBBPF_BUILD_DIR}/root/usr/lib64/libbpf.a")
+
 ExternalProject_Add(
   libbpf
   URL "https://github.com/libbpf/libbpf/archive/a199b854156ccac574eb031d464d8fd1a5523ce2.tar.gz"
@@ -27,8 +28,12 @@ ExternalProject_Add(
   BUILD_COMMAND PKG_CONFIG_PATH=${ZLIB_PKGCONFIG}:${LIBELF_PKGCONFIG} BUILD_STATIC_ONLY=y OBJDIR=${LIBBPF_BUILD_DIR}/build DESTDIR=${LIBBPF_BUILD_DIR}/root make -C ${LIBBPF_SRC}/libbpf/src install
   INSTALL_COMMAND "")
 
+if (USE_BUNDLED_LIBELF)
+  add_dependencies(libbpf libelf)
+endif ()
 if (USE_BUNDLED_ZLIB)
   add_dependencies(libbpf zlib)
 endif ()
+
 message(STATUS "Using bundled libbpf: include'${LIBBPF_INCLUDE}', lib: ${LIBBPF_LIB}")
 

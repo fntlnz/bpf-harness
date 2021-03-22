@@ -19,7 +19,15 @@ target_include_directories(bpf_harness PUBLIC
 
 target_link_libraries(bpf_harness PRIVATE ${LIBBPF_LIB} ${ZLIB_LIB} ${LIBELF_LIB})
 
-add_dependencies(bpf_harness zlib libelf libbpf)
+
+if (USE_BUNDLED_LIBELF)
+  add_dependencies(bpf_harness libelf)
+endif ()
+if (USE_BUNDLED_ZLIB)
+  add_dependencies(bpf_harness zlib)
+endif ()
+
+add_dependencies(bpf_harness libbpf)
 target_compile_features(bpf_harness PUBLIC cxx_std_11)
 
 source_group(
